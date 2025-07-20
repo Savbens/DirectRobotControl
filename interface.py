@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-import threading
 import queue
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -73,10 +72,12 @@ class RobotMonitorApp(tk.Tk):
     def _on_start(self):
         self.running = True
         self.log_event("Нажата кнопка Старт")
+        self.queue_in.put({"action": "start"})
 
     def _on_stop(self):
         self.running = False
         self.log_event("Нажата кнопка Стоп")
+        self.queue_in.put({"action": "stop"})
 
     def _on_speed_change(self, val):
         self.slider_value = float(val)
@@ -85,6 +86,7 @@ class RobotMonitorApp(tk.Tk):
     def _on_speed_release(self, event):
         self.current_speed = self.slider_value
         self.log_event(f"Установлена скорость: {self.current_speed:.1f}")
+        self.queue_in.put({"action": "set_speed", "value": self.current_speed})
 
     def log_event(self, message: str):
         self.log_text.insert(tk.END, message + "\n")
