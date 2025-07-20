@@ -4,8 +4,7 @@ import threading
 import queue
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-import random
-import time
+from test import external_data_generator
 
 class RobotMonitorApp(tk.Tk):
     def __init__(self):
@@ -109,20 +108,9 @@ class RobotMonitorApp(tk.Tk):
         self.canvas.draw()
 
 
-def external_data_generator(self):
-        while True:
-            if self.running:
-                # скорость влияет на амплитуду колебаний
-                base = self.current_speed
-                noise = random.uniform(-10, 10)
-                value = max(0, min(100, base + noise))
-                self.queue_out.put(value)
-            time.sleep(0.5)
-
 if __name__ == '__main__':
     app = RobotMonitorApp()
 
-    # Запуск генератора данных отдельно!
     threading.Thread(target=external_data_generator, args=(app,), daemon=True).start()
 
     app.mainloop()
