@@ -4,7 +4,6 @@ import threading
 import queue
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from test import external_data_generator
 
 class RobotMonitorApp(tk.Tk):
     def __init__(self):
@@ -106,14 +105,6 @@ class RobotMonitorApp(tk.Tk):
         self.y_data.pop(0)
         self.line.set_ydata(self.y_data)
         self.canvas.draw()
-
-
-if __name__ == '__main__':
-    app = RobotMonitorApp()
-
-    threading.Thread(target=external_data_generator, args=(app,), daemon=True).start()
-
-    app.mainloop()
 
 
 
